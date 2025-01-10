@@ -3,11 +3,19 @@ import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import ProfileInfo from "../Cards/ProfileInfo";
 import SearchBar from "../SearchBar/SearchBar";
+// import { useSelector, useDispatch } from "react-redux";
+// import { toggleTheme } from "../../theme/themeSlice";
+// import { FaMoon, FaSun } from "react-icons/fa6";
 
-const Navbar = ({ userInfo, onSearchNote, handleClearSearch, darkMode }) => {
+
+const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
+
+    // const dispatch = useDispatch();
+
+    // const { theme } = useSelector((state) => state.theme)
 
     const onLogout = () => {
         localStorage.clear();
@@ -30,14 +38,10 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch, darkMode }) => {
     };
 
     return (
-        <nav className={`${
-            darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'
-        } transition-colors duration-200`}>
+        <nav className="bg-white text-black transition-colors duration-200">
             {/* Desktop and Tablet Navigation */}
             <div className="hidden md:flex items-center justify-between px-6 py-2 drop-shadow">
-                <h2 className={`text-xl font-medium ${
-                    darkMode ? 'text-white' : 'text-black'
-                }`}>Notes</h2>
+                <h2 className="text-xl font-medium text-black">Notes</h2>
                 <div className="flex-1 max-w-xl mx-4">
                     <SearchBar
                         value={searchQuery}
@@ -46,23 +50,25 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch, darkMode }) => {
                         }}
                         handleSearch={handleSearch}
                         onClearSearch={onClearSearch}
-                        darkMode={darkMode}
                     />
                 </div>
-                <ProfileInfo userInfo={userInfo} onLogout={onLogout} darkMode={darkMode} />
+                {/* <div>
+                    <button className="w-12 h-12 ml-96" onClick={() => dispatch(toggleTheme())}>
+                        {
+                            theme === 'light' ? <FaSun/> : <FaMoon/>
+                        }
+                    </button>
+                </div> */}
+                <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </div>
 
             {/* Mobile Navigation */}
             <div className="md:hidden">
                 <div className="flex items-center justify-between px-4 py-2 drop-shadow">
-                    <h2 className={`text-lg font-medium ${
-                        darkMode ? 'text-white' : 'text-black'
-                    }`}>Notes</h2>
+                    <h2 className="text-lg font-medium text-black">Notes</h2>
                     <button
                         onClick={toggleMenu}
-                        className={`p-2 rounded-lg ${
-                            darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                        }`}
+                        className="p-2 rounded-lg hover:bg-gray-100"
                         aria-label="Toggle menu"
                     >
                         {isMenuOpen ? (
@@ -75,9 +81,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch, darkMode }) => {
 
                 {/* Mobile Menu */}
                 {isMenuOpen && (
-                    <div className={`px-4 py-2 ${
-                        darkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg`}>
+                    <div className="px-4 py-2 bg-white shadow-lg">
                         <div className="mb-4">
                             <SearchBar
                                 value={searchQuery}
@@ -86,14 +90,12 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch, darkMode }) => {
                                 }}
                                 handleSearch={handleSearch}
                                 onClearSearch={onClearSearch}
-                                darkMode={darkMode}
                             />
                         </div>
                         <div className="py-2">
                             <ProfileInfo 
                                 userInfo={userInfo} 
                                 onLogout={onLogout} 
-                                darkMode={darkMode}
                                 isMobile={true}
                             />
                         </div>

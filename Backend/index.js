@@ -3,7 +3,9 @@ require("dotenv").config();
 const config = require("./config.json")
 const mongoose = require("mongoose")
 
-mongoose.connect(config.connectionString);
+mongoose.connect(config.connectionString)
+.then(() => console.log('MongoDB connected successfully!'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 const User = require("./models/user.model")
 const Note = require("./models/note.model")
@@ -14,7 +16,7 @@ const app = express()
 
 const jwt = require("jsonwebtoken")
 const {authenticateToken} = require("./utilities")
-console.log(authenticateToken);
+// console.log(authenticateToken);
 
 
 
@@ -114,7 +116,7 @@ app.post("/login", async (req, res) =>{
     else{
         return res.status(400).json({
             error: true,
-            message: "Invalid Creadentials"
+            message: "Invalid Credentials"
         })
     }
 })
@@ -344,7 +346,10 @@ app.get("/search-notes/", authenticateToken, async (req, res) =>{
 
 
 
-
-app.listen(8000)
+const PORT = 8000
+app.listen(PORT, () =>{
+    console.log(`server is started at port ${PORT}`);
+    
+})
 
 module.exports = app;

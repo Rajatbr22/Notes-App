@@ -1,5 +1,4 @@
 import { MdAdd } from "react-icons/md";
-import { FaMoon, FaSun } from "react-icons/fa";
 import NoteCard from "../../components/Cards/NoteCard";
 import Navbar from "../../components/Navbar/Navbar";
 import AddEditNotes from "./AddEditNotes";
@@ -13,7 +12,8 @@ import AddNotesImg from "../../assets/images/add-notes.svg";
 import NoData from "../../assets/images/no-data.svg";
 
 const Home = () => {
-    const [darkMode, setDarkMode] = useState(false);
+    
+
     const [openAddEditModal, setOpenAddEditModal] = useState({
         isShown: false,
         type: "add",
@@ -30,10 +30,6 @@ const Home = () => {
     });
 
     const navigate = useNavigate();
-
-    const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
-    };
 
     const handleEdit = (noteDetails) => {
         setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
@@ -86,7 +82,7 @@ const Home = () => {
         try {
             const response = await axiosInstance.delete("delete-note/" + noteId);
             if (response.data && !response.data.error) {
-                showToastMessage("Note Deleted Successfully", 'delete');
+                showToastMessage("Note Deleted Successfully", "delete");
                 getAllNotes();
             }
         } catch (error) {
@@ -112,7 +108,7 @@ const Home = () => {
         const noteId = noteData._id;
         try {
             const response = await axiosInstance.put("update-note-pinned/" + noteId, {
-                "isPinned": !noteData.isPinned,
+                isPinned: !noteData.isPinned,
             });
             if (response.data && response.data.note) {
                 showToastMessage("Note Updated Successfully");
@@ -134,25 +130,12 @@ const Home = () => {
     }, []);
 
     return (
-        <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-            <Navbar 
-                userInfo={userInfo} 
-                onSearchNote={onSearchNote} 
+        <div className="min-h-screen bg-white text-gray-900 transition-colors duration-200">
+            <Navbar
+                userInfo={userInfo}
+                onSearchNote={onSearchNote}
                 handleClearSearch={handleClearSearch}
-                darkMode={darkMode}
             />
-
-            <button
-                onClick={toggleDarkMode}
-                className="fixed flex items-center justify-between  top-4 right-40 p-2 rounded-full hover:bg-opacity-80 transition-colors duration-200"
-                aria-label="Toggle dark mode"
-            >
-                {darkMode ? (
-                    <FaSun className="text-yellow-400 text-xl" />
-                ) : (
-                    <FaMoon className="text-gray-600 text-xl" />
-                )}
-            </button>
 
             <div className="container mx-auto px-4">
                 {allNotes.length > 0 ? (
@@ -168,23 +151,23 @@ const Home = () => {
                                 onEdit={() => handleEdit(item)}
                                 onDelete={() => deleteNote(item)}
                                 onPinNote={() => updateIsPinned(item)}
-                                darkMode={darkMode}
                             />
                         ))}
                     </div>
                 ) : (
-                    <EmptyCard 
-                        imgSrc={isSearch ? NoData : AddNotesImg} 
-                        message={isSearch ? 'Oops! No notes found matching your search.' : 'Start creating your first note! Click the "Add" button to jot down your thoughts, ideas, and reminders. Let\'s get started!'}
-                        darkMode={darkMode}
+                    <EmptyCard
+                        imgSrc={isSearch ? NoData : AddNotesImg}
+                        message={
+                            isSearch
+                                ? "Oops! No notes found matching your search."
+                                : 'Start creating your first note! Click the "Add" button to jot down your thoughts, ideas, and reminders. Let\'s get started!'
+                        }
                     />
                 )}
             </div>
 
-            <button 
-                className={`w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full md:rounded-2xl ${
-                    darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-primary hover:bg-blue-600'
-                } fixed right-4 md:right-10 bottom-4 md:bottom-10 transition-colors duration-200`}
+            <button
+                className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-primary hover:bg-blue-600 fixed right-4 md:right-10 bottom-4 md:bottom-10 transition-colors duration-200"
                 onClick={() => {
                     setOpenAddEditModal({
                         isShown: true,
@@ -205,9 +188,7 @@ const Home = () => {
                     },
                 }}
                 contentLabel=""
-                className={`w-[90%] md:w-[60%] lg:w-[40%] max-h-3/4 rounded-md mx-auto mt-14 p-5 overflow-scroll ${
-                    darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-                }`}
+                className="w-[90%] md:w-[60%] lg:w-[40%] max-h-3/4 rounded-md mx-auto mt-14 p-5 overflow-scroll bg-white text-gray-900"
             >
                 <AddEditNotes
                     type={openAddEditModal.type}
@@ -221,7 +202,6 @@ const Home = () => {
                     }}
                     getAllNotes={getAllNotes}
                     showToastMessage={showToastMessage}
-                    darkMode={darkMode}
                 />
             </Modal>
 
@@ -230,7 +210,6 @@ const Home = () => {
                 message={showToastMsg.message}
                 type={showToastMsg.type}
                 onClose={handleCloseToast}
-                darkMode={darkMode}
             />
         </div>
     );
